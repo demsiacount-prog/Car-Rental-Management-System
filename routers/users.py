@@ -4,8 +4,11 @@ from database import get_db
 import schemas
 from sqlalchemy.orm import Session
 from typing import List
+from ..hashing import hash_password
 
 router = APIRouter(prefix="/api/users", tags=["Users"])
+
+
 
 
 
@@ -28,7 +31,15 @@ def get_user_by_id(id : str, db : Session = Depends(get_db)):
 #Créer un utilisateur 
 @router.post("",response_model=schemas.UtilisateurResponse)
 def create_user(request : schemas.UtilisateurCreate,db : Session = Depends(get_db)):
-    new_user = models.Utilisateur(**request.model_dump())
+    
+    new_user = models.Utilisateur(
+        id_user = request.id_user,
+        nom = request.nom,
+        prenom = request.prenom,
+        mot_de_passe = hash_password(request.mot_de_passe),
+        role = request.role,
+        id_admin = request.id_admin
+    )
     if request.role == "agent" :
         admin = db.query(models.Utilisateur).filter(new_user.id_admin == models.Utilisateur.id_admin)
         if not admin :

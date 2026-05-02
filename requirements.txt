@@ -2,4 +2,4 @@ fastapi
 sqlalchemy
 uvicorn
 passlib
-bcrypt
+argon2-cffi

@@ -5,6 +5,7 @@ from database import engine ,get_db
 import schemas
 from sqlalchemy.orm import Session
 from typing import List
+from ..hashing import hash_password
 
 
 
@@ -37,7 +38,7 @@ def create_client(request : schemas.ClientCreate, db : Session = Depends(get_db)
     new_client = models.Client(
         id_client = request.id_client,
         nom = request.nom,
-        mot_de_passe = request.mot_de_passe,
+        mot_de_passe = hash_password(request.mot_de_passe),
         prenom = request.prenom,
         adresse = request.adresse,
         tel = request.tel,

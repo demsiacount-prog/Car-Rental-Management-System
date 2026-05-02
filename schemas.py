@@ -45,6 +45,7 @@ class UtilisateurResponse(BaseModel):
     id_user: str
     nom: str 
     prenom: str
+    mot_de_passe : str
     role: RoleEnum
     id_admin: Optional[str] 
 

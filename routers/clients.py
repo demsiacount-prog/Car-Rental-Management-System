@@ -18,14 +18,14 @@ router = APIRouter(prefix="/api/clients",tags=["clients"])
 
 # Recuperer tous les clients
 
-@router.get("", response_model=List[schemas.ClientResponse])
+@router.get("/", response_model=List[schemas.ClientResponse])
 def get_all_clients(db: Session = Depends(get_db)):
     clients = db.query(models.Client).all()
     if not clients:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Aucun client trouvé")
     return clients
 # Recuperer un client par id
-@router.get("/api/clients/{id}",response_model=schemas.ClientResponse)
+@router.get("/{id}",response_model=schemas.ClientResponse)
 def get_client_by_id(id:str,db : Session = Depends(get_db)):
     client = db.query(models.Client).filter(models.Client.id_client == id).first()
     if not client :
@@ -33,7 +33,7 @@ def get_client_by_id(id:str,db : Session = Depends(get_db)):
     return client
 
 # Créer un nouveau Client
-@router.post("", status_code=status.HTTP_201_CREATED,response_model=schemas.ClientResponse)
+@router.post("/", status_code=status.HTTP_201_CREATED,response_model=schemas.ClientResponse)
 def create_client(request : schemas.ClientCreate, db : Session = Depends(get_db)):
     new_client = models.Client(
         id_client = request.id_client,
@@ -51,7 +51,7 @@ def create_client(request : schemas.ClientCreate, db : Session = Depends(get_db)
     return new_client
 
 # Supprimer un client
-@router.delete("/api/clients/{id_client}", status_code=status.HTTP_200_OK)
+@router.delete("/{id_client}", status_code=status.HTTP_200_OK)
 def delete_client (id_client : str, db : Session = Depends(get_db)):
     deleteted_client = db.query(models.Client).filter(models.Client.id_client == id_client).first()
     if not deleteted_client:
@@ -61,7 +61,7 @@ def delete_client (id_client : str, db : Session = Depends(get_db)):
     return {"detail": f"Client {id_client} supprimé"}
 
 # Mettre à jour un client
-@router.put("/api/clients/{id_client}")
+@router.put("/{id_client}")
 def update_client(id_client: str, request: schemas.ClientCreate, db: Session = Depends(get_db)):
     # 1. Rechercher le client existant
     db_client = db.query(models.Client).filter(models.Client.id_client == id_client).first()

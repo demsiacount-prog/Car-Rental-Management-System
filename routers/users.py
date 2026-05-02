@@ -13,7 +13,7 @@ router = APIRouter(prefix="/api/users", tags=["Users"])
 
 
 #Recupérer tous les utilisateurs
-@router.get("", response_model=List[schemas.UtilisateurResponse])
+@router.get("/", response_model=List[schemas.UtilisateurResponse])
 def get_all_users(db : Session = Depends(get_db)):
     db_agents = db.query(models.Utilisateur).all()
     if  not db_agents:
@@ -29,7 +29,7 @@ def get_user_by_id(id : str, db : Session = Depends(get_db)):
     return got_user
 
 #Créer un utilisateur 
-@router.post("",response_model=schemas.UtilisateurResponse)
+@router.post("/",response_model=schemas.UtilisateurResponse)
 def create_user(request : schemas.UtilisateurCreate,db : Session = Depends(get_db)):
     
     new_user = models.Utilisateur(

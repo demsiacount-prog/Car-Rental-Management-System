@@ -48,6 +48,7 @@ class UtilisateurResponse(BaseModel):
     role: RoleEnum
     id_admin: Optional[str] 
 
+# La classe config est necessaire dans les responses model pour eviter les erreurs
     class Config:
         orm_mode = True
 

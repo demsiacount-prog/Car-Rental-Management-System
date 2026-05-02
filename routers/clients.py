@@ -12,7 +12,7 @@ from typing import List
 
 
 
-router = APIRouter(prefix="/api/clients/",tags=["clients"])
+router = APIRouter(prefix="/api/clients",tags=["clients"])
 
 
 # Recuperer tous les clients
@@ -20,6 +20,8 @@ router = APIRouter(prefix="/api/clients/",tags=["clients"])
 @router.get("", response_model=List[schemas.ClientResponse])
 def get_all_clients(db: Session = Depends(get_db)):
     clients = db.query(models.Client).all()
+    if not clients:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail="Aucun client trouvé")
     return clients
 # Recuperer un client par id
 @router.get("/api/clients/{id}",response_model=schemas.ClientResponse)
